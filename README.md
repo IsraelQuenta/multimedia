@@ -1,6 +1,6 @@
 # 💻 Proyecto Individual Israel Andres Quenta Pomacusi
 
-Este proyecto es una plataforma web modular interactiva desarrollada para el laboratorio de Computación Gráfica. El sistema integra dos grandes áreas de estudio: el Procesamiento Digital de Imágenes (PDI) en 2D a nivel de arreglos de píxeles y la renderización en tiempo real de modelos abstractos animados en un entorno tridimensional (3D).
+Este proyecto es una plataforma web modular interactiva desarrollada para la materia de desarrollo de aplicacione multimedia. El sistema integra dos grandes áreas de estudio: el Procesamiento Digital de Imágenes (PDI) en 2D a nivel de arreglos de píxeles y la renderización en tiempo real de modelos abstractos animados en un entorno tridimensional (3D).
 
 ---
 
