@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 3: Animacion de la Vaca Lola</title>
+    
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.179.1/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.179.1/examples/jsm/"
+        }
+      }
+    </script>
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #87ceeb;
+            font-family: sans-serif;
+        }
+
+        #playBtn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            padding: 14px 28px;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #ffc107;
+            color: #212529;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: transform 0.1s ease;
+        }
+
+        #playBtn:active {
+            transform: scale(0.96);
+        }
+    </style>
+</head>
+<body>
+
+    <button id="playBtn">Iniciar Animacion 3D</button>
+
+    <script type="module" src="./js/app.js"></script>
+
+</body>
+</html>

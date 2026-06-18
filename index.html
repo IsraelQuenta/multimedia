@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laboratorio de Computacion Grafica</title>
+<style>
+  :root{
+    --primary:#007acc;
+    --success:#28a745;
+    --warning:#ffc107;
+    --secondary:#6c757d;
+    --light:#f0f0f0;
+    --border:#dee2e6;
+    --text:#212529;
+    --muted:#6c757d;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background:var(--light);
+    color:var(--text);
+    font-size:16px;
+    line-height:1.5;
+  }
+
+  .container{
+    max-width:1200px;
+    margin:0 auto;
+    padding:20px;
+  }
+
+  h1.app-title{
+    font-size:1.6rem;
+    font-weight:600;
+    margin:0 0 20px 0;
+    text-align: center;
+  }
+
+  /* ── Sistema de Pestanas (Tabs) ── */
+  .tabs-nav {
+    display: flex;
+    gap: 5px;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 20px;
+  }
+
+  .tab-btn {
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    background: #e9ecef;
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    cursor: pointer;
+    color: var(--secondary);
+    transition: all 0.2s ease;
+    margin-bottom: -2px;
+  }
+
+  .tab-btn:hover { background: #dee2e6; color: var(--text); }
+
+  .tab-btn.active {
+    background: #fff;
+    color: var(--primary);
+    border-top: 3px solid var(--primary);
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    position: relative;
+    z-index: 2;
+  }
+
+  .tab-content {
+    display: none;
+    background: #fff;
+    padding: 20px;
+    border-radius: 0 0 6px 6px;
+    border: 1px solid var(--border);
+    border-top: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  }
+
+  .tab-content.active { display: block; }
+
+  .toolbar{
+    background:#e9ecef;
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:14px;
+    margin-bottom:16px;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:10px;
+  }
+
+  .btn{
+    display:inline-block;
+    font-weight:600;
+    font-size:0.95rem;
+    padding:10px 18px;
+    border-radius:6px;
+    border:1px solid transparent;
+    cursor:pointer;
+    transition:all .15s ease;
+    color:#fff;
+  }
+  .btn:active{ transform:translateY(1px); }
+  .btn:disabled{ opacity:0.55; cursor:not-allowed; }
+
+  .btn-primary{ background:var(--primary); }
+  .btn-success{ background:var(--success); }
+  .btn-warning{ background:var(--warning); color:#212529; }
+  .btn-secondary{ background:var(--secondary); }
+
+  input[type="file"]{ display:none; }
+
+  .panels{
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+    margin-bottom:14px;
+  }
+
+  .panel{
+    flex:1 1 420px;
+    border:1px solid var(--border);
+    border-radius:6px;
+    background:#fff;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .panel-header{
+    background:#f8f9fa;
+    border-bottom:1px solid var(--border);
+    font-weight:600;
+    font-size:0.9rem;
+    padding:8px 12px;
+  }
+
+  .panel-body{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#dcdcdc;
+    padding:10px;
+    min-height:380px;
+  }
+
+  .panel-body img{
+    max-width:100%;
+    max-height:460px;
+    object-fit:contain;
+  }
+
+  .panel-placeholder{ color:#aaa; }
+
+  @media (max-width: 760px){
+    .panels{ flex-direction:column; }
+    .tabs-nav { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1 class="app-title">Proyecto individual MULTIMEDIA</h1>
+
+  <div class="tabs-nav">
+    <button class="tab-btn active" onclick="cambiarPestana('ejercicio1')">Ejercicio 1: Terreno</button>
+    <button class="tab-btn" onclick="cambiarPestana('ejercicio2')">Ejercicio 2: Suavizado</button>
+    <a href="./animacion.html" target="_blank" style="text-decoration: none;">
+      <button class="tab-btn" style="color: var(--primary);">Ejercicio 3: Ver 3D ↗</button>
+    </a>
+  </div>
+
+  <div id="ejercicio1" class="tab-content active">
+    <div class="toolbar">
+      <label for="inputArchivo1" class="btn btn-primary">1. Cargar Imagen Terreno</label>
+      <input type="file" id="inputArchivo1" accept=".jpg,.jpeg,.png">
+      <button class="btn btn-success" id="btnClasificar" disabled>2. Clasificar Terreno (RGB)</button>
+      <button class="btn btn-secondary" id="btnGuardar1" disabled>💾 Guardar Resultado</button>
+    </div>
+    <div class="panels">
+      <div class="panel">
+        <div class="panel-header">Imagen Original</div>
+        <div class="panel-body" id="panelOrig1"><span class="panel-placeholder">Sin imagen</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">Resultado Clasificacion</div>
+        <div class="panel-body" id="panelRes1"><span class="panel-placeholder">Sin imagen</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="ejercicio2" class="tab-content">
+    <div class="toolbar">
+      <label for="inputArchivo2" class="btn btn-primary">1. Cargar Imagen</label>
+      <input type="file" id="inputArchivo2" accept=".jpg,.jpeg,.png">
+      <button class="btn btn-warning" id="btnSuavizar" disabled>2. Aplicar Filtro Suavizado 3x3</button>
+      <button class="btn btn-secondary" id="btnGuardar2" disabled>💾 Guardar Resultado</button>
+    </div>
+    <div class="panels">
+      <div class="panel">
+        <div class="panel-header">Imagen Original</div>
+        <div class="panel-body" id="panelOrig2"><span class="panel-placeholder">Sin imagen</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">Resultado Suavizado</div>
+        <div class="panel-body" id="panelRes2"><span class="panel-placeholder">Sin imagen</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<canvas id="canvasOriginal"></canvas>
+<canvas id="canvasResultado"></canvas>
+
+<script>
+function cambiarPestana(idPestana) {
+  document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+  document.getElementById(idPestana).classList.add('active');
+  
+  const botonActivo = Array.from(document.querySelectorAll('.tab-btn'))
+    .find(btn => btn.getAttribute('onclick')?.includes(idPestana));
+  if (botonActivo) botonActivo.classList.add('active');
+}
+</script>
+
+<script>
+(function(){
+  "use strict";
+  const inputArchivo1 = document.getElementById('inputArchivo1');
+  const inputArchivo2 = document.getElementById('inputArchivo2');
+  const btnClasificar = document.getElementById('btnClasificar');
+  const btnSuavizar   = document.getElementById('btnSuavizar');
+  const btnGuardar1   = document.getElementById('btnGuardar1');
+  const btnGuardar2   = document.getElementById('btnGuardar2');
+  const canvasOriginal  = document.getElementById('canvasOriginal');
+  const canvasResultado = document.getElementById('canvasResultado');
+  let imagenActual = null;
+  let nombreArchivo = "";
+
+  function procesarCarga(e, panelOriginal, panelResultado, btnAccion) {
+    const archivo = e.target.files[0];
+    if(!archivo) return;
+    const lector = new FileReader();
+    lector.onload = function(ev){
+      const img = new Image();
+      img.onload = function(){
+        imagenActual = img;
+        nombreArchivo = archivo.name;
+        canvasOriginal.width = img.naturalWidth;
+        canvasOriginal.height = img.naturalHeight;
+        canvasOriginal.getContext('2d').drawImage(img, 0, 0);
+        panelOriginal.innerHTML = `<img src="${ev.target.result}">`;
+        panelResultado.innerHTML = '<span class="panel-placeholder">Sin procesar</span>';
+        btnAccion.disabled = false;
+      };
+      img.src = ev.target.result;
+    };
+    lector.readAsDataURL(archivo);
+  }
+
+  inputArchivo1.addEventListener('change', e => procesarCarga(e, document.getElementById('panelOrig1'), document.getElementById('panelRes1'), btnClasificar));
+  inputArchivo2.addEventListener('change', e => procesarCarga(e, document.getElementById('panelOrig2'), document.getElementById('panelRes2'), btnSuavizar));
+
+  btnClasificar.addEventListener('click', function(){
+    const w = canvasOriginal.width, h = canvasOriginal.height;
+    const src = canvasOriginal.getContext('2d').getImageData(0, 0, w, h).data;
+    const salida = new Uint8ClampedArray(src.length);
+    for(let i = 0; i < src.length; i += 4){
+      let r = src[i], g = src[i+1], b = src[i+2];
+      let nubes = (r > 220) && (g > 220) && (b > 220);
+      let veg = !nubes && (g > r) && (g > b);
+      let tie = !nubes && !veg && (r > g) && (r > b) && ((r - b) > 20);
+      let cem = !nubes && !veg && !tie && (Math.abs(r - g) < 25) && (Math.abs(g - b) < 25) && (r > 100);
+      let cr=0, cg=0, cb=0;
+      if(nubes){ cr=255; cg=255; cb=255; }
+      else if(veg){ cr=0; cg=255; cb=0; }
+      else if(tie){ cr=139; cg=69; cb=19; }
+      else if(cem){ cr=128; cg=128; cb=128; }
+      salida[i]=cr; salida[i+1]=cg; salida[i+2]=cb; salida[i+3]=255;
+    }
+    canvasResultado.width = w; canvasResultado.height = h;
+    canvasResultado.getContext('2d').putImageData(new ImageData(salida, w, h), 0, 0);
+    document.getElementById('panelRes1').innerHTML = `<img src="${canvasResultado.toDataURL()}">`;
+    btnGuardar1.disabled = false;
+  });
+
+  btnSuavizar.addEventListener('click', function(){
+    const w = canvasOriginal.width, h = canvasOriginal.height;
+    const src = canvasOriginal.getContext('2d').getImageData(0, 0, w, h).data;
+    const salida = new Uint8ClampedArray(src.length);
+    for(let y = 0; y < h; y++){
+      for(let x = 0; x < w; x++){
+        let destI = (y * w + x) * 4;
+        if(y===0 || y===h-1 || x===0 || x===w-1){
+          salida[destI]=src[destI]; salida[destI+1]=src[destI+1]; salida[destI+2]=src[destI+2]; salida[destI+3]=255;
+          continue;
+        }
+        let sr=0, sg=0, sb=0;
+        for(let dy=-1; dy<=1; dy++){
+          for(let dx=-1; dx<=1; dx++){
+            let i = ((y+dy)*w + (x+dx))*4;
+            sr+=src[i]; sg+=src[i+1]; sb+=src[i+2];
+          }
+        }
+        salida[destI]=Math.round(sr/9); salida[destI+1]=Math.round(sg/9); salida[destI+2]=Math.round(sb/9); salida[destI+3]=255;
+      }
+    }
+    canvasResultado.width = w; canvasResultado.height = h;
+    canvasResultado.getContext('2d').putImageData(new ImageData(salida, w, h), 0, 0);
+    document.getElementById('panelRes2').innerHTML = `<img src="${canvasResultado.toDataURL()}">`;
+    btnGuardar2.disabled = false;
+  });
+
+  function descargar() {
+    const a = document.createElement('a');
+    a.href = canvasResultado.toDataURL();
+    a.download = "resultado_procesado.png";
+    a.click();
+  }
+  btnGuardar1.addEventListener('click', descargar);
+  btnGuardar2.addEventListener('click', descargar);
+})();
+</script>
+</body>
+</html>
